@@ -10,13 +10,13 @@ promise.catch(whenfail)
 }
 
 function process(response){
-    // console.log(response.data)
+    console.log(response.data)
     for(let i = 0; i<response.data.length; i++){
         menu.innerHTML += `
             <div class="movie">
                 <img src="${response.data[i].imagem}">
                 <div class="title">${response.data[i].titulo}</div>
-                <button onclick='buy(this)'>
+                <button onclick='buy(${response.data[i].id})'>
                 Comprar
                 <ion-icon name="cart-outline"></ion-icon>
                 </button>
@@ -24,16 +24,21 @@ function process(response){
     }   
 }
 
-function buy(){
+function buy(id){
     const name = prompt("Qual seu nome?");
     const qntsit = parseInt(prompt("Quantidade de assentos?"));
 
     const buyrequest = {nome: name,
         quantidade: qntsit
     }
-    axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/moviefinder/filmes", buyrequest)
+    const test = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/moviefinder/filmes/${id}/ingresso`, buyrequest)
+    test.then(whensucess)
+    test.catch(whenfail)
 }
 
 function whenfail(){
     alert("Ingressos esgotados!")
+}
+function whensucess(){
+    alert("Ingresso comprado com sucesso")
 }
