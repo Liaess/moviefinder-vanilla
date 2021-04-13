@@ -1,13 +1,21 @@
-const bbb = document.querySelector(".movies");
+const menu = document.querySelector(".movies");
+
+
+request()
+
+function request(){
 const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/moviefinder/filmes");
 promise.then(process);
+promise.catch(whenfail)
+}
 
-function process(aaa){
-    for(let i = 0; i<aaa.data.length; i++){
-        bbb.innerHTML += `
+function process(response){
+    // console.log(response.data)
+    for(let i = 0; i<response.data.length; i++){
+        menu.innerHTML += `
             <div class="movie">
-                <img src="${aaa.data[i].imagem}">
-                <div class="title">${aaa.data[i].titulo}</div>
+                <img src="${response.data[i].imagem}">
+                <div class="title">${response.data[i].titulo}</div>
                 <button onclick='buy(this)'>
                 Comprar
                 <ion-icon name="cart-outline"></ion-icon>
@@ -16,3 +24,16 @@ function process(aaa){
     }   
 }
 
+function buy(){
+    const name = prompt("Qual seu nome?");
+    const qntsit = parseInt(prompt("Quantidade de assentos?"));
+
+    const buyrequest = {nome: name,
+        quantidade: qntsit
+    }
+    axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/moviefinder/filmes", buyrequest)
+}
+
+function whenfail(){
+    alert("Ingressos esgotados!")
+}
